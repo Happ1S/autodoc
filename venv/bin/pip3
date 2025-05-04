@@ -1,4 +1,4 @@
-#!/home/user1/autodoc/output/venv/bin/python3
+#!/home/happ1s/Документы/GitHub/autodoc/venv/bin/python
 # -*- coding: utf-8 -*-
 import re
 import sys

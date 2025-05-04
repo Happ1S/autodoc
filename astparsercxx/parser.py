@@ -4,10 +4,6 @@ import os
 from clang import cindex
 from typing import List, Tuple
 
-# Указываем путь к libclang; настройте под вашу систему
-# Убедитесь, что версия libclang соответствует биндингам (clangdev и python-clang-cindex)
-cindex.Config.set_library_file("/usr/lib/llvm-17/lib/libclang-17.so.1")
-# Отключаем строгую проверку символов
 cindex.Config.compatibility_check = False
 
 # Definition = (тип, имя, номер строки)

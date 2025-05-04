@@ -64,7 +64,7 @@ def main():
 
     prompts = build_prompts(defs, repo_root)
 
-    client = LLMClient(base_url="http://localhost:8000/v1", api_key=None)
+    client = LLMClient()
     responses = {}
     for key, prompt in prompts.items():
         print(f"✏️  Запрос LLM для {key}...")

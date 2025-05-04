@@ -32,7 +32,20 @@ def render_docs(definitions: List[Dict], llm_responses: Dict[str, str],
 
     for d in definitions:
         key = f"{d['file']}:{d['name']}:{d['line']}"
-        description = llm_responses.get(key, '')
+        description = llm_responses.get(key, '_Описание не сгенерировано_')
+
+        # Если нет snippet, подгружаем из файла: 2 строки до и 2 после
+        snippet = d.get('snippet')
+        if not snippet:
+            try:
+                with open(d['file'], encoding='utf-8') as src:
+                    lines = src.readlines()
+                center = d['line'] - 1
+                start = max(0, center - 2)
+                end = min(len(lines), center + 3)
+                snippet = ''.join(lines[start:end]).rstrip()
+            except Exception:
+                snippet = ''
 
         # Рендерим шаблон
         rendered = template.render(
@@ -40,11 +53,11 @@ def render_docs(definitions: List[Dict], llm_responses: Dict[str, str],
             type=d['type'],
             name=d['name'],
             line=d['line'],
+            snippet=snippet,
             description=description
         )
 
         # Формируем имя выходного файла
-        # e.g. docs/module_function_foo_line10.md
         fname = f"{os.path.splitext(os.path.basename(d['file']))[0]}_{d['type']}_{d['name']}_line{d['line']}.md"
         out_path = os.path.join(output_dir, fname)
         with open(out_path, 'w', encoding='utf-8') as f:
